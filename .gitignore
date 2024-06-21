@@ -2,27 +2,27 @@
 .vscode/
 *.sln
 *.csproj
-*.csproj.user
-*.suo
-*.userprefs
-*.lock.json
+**/*.csproj.user
+**/*.suo
+**/*.userprefs
+**/*.lock.json
 
 # Build output
-/bin/
-/obj/
+**/bin/
+**/obj/
 
 # SQLite
 *.db
 *.db-journal
 
 # Angular
-/node_modules/
-/dist/
-/.angular-cli.json
-/.npmrc
-/.yarnrc
-/yarn.lock
-/package-lock.json
+**/node_modules/
+**/dist/
+**/.angular-cli.json
+**/.npmrc
+**/.yarnrc
+**/yarn.lock
+**/package-lock.json
 
 # IDE specific files
 *.idea/
