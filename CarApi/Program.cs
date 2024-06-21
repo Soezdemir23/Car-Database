@@ -39,7 +39,7 @@ app.MapGet("/caritems/reserved", async (CarDb db) =>
 
 app.MapGet("/caritems/{id}", async (int id, CarDb db) =>
 {
-    Car car = await db.Cars.FindAsync(id);
+    Car? car = await db.Cars.FindAsync(id);
     if (car is not null) return  Results.Ok(car);
     else return Results.NotFound();
 }
@@ -55,7 +55,7 @@ app.MapPost("/caritems", async (Car car, CarDb db) =>
 
 app.MapPut("caritems/{id}", async (int id, Car car, CarDb db) =>
 {
-    Car searchCar = await db.Cars.FindAsync(id);
+    Car? searchCar = await db.Cars.FindAsync(id);
     if (searchCar is null) return Results.NotFound();
 
     searchCar.Brand = car.Brand;

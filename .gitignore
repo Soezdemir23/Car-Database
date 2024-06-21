@@ -1,7 +1,7 @@
 # Visual Studio / Visual Studio Code
 .vscode/
-*.sln
-*.csproj
+
+
 **/*.csproj.user
 **/*.suo
 **/*.userprefs
@@ -37,3 +37,4 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+CarApi/obj/CarApi.csproj.nuget.dgspec.json
