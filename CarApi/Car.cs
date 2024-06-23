@@ -4,5 +4,11 @@ public class Car {
     public string? Model {get;set;}
     public int? Year {get;set;}
     public bool Reserved {get;set;}
-    public Decimal Price {get;set;}    
+    public Decimal Price {get;set;}
+
+
+
+public override string ToString() {
+    return $"Id: {Id}, Brand: {Brand}, Model: {Model}, Year: {Year}, Reserved: {Reserved}, Price: {Price}";
+}
 }
