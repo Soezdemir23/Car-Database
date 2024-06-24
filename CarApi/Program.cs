@@ -42,50 +42,36 @@ carItems.MapPut("/{id}", UpdateCar);
 carItems.MapDelete("/{id}",RemoveCarById);
 
 static async Task<IResult> GetAllCars(CarDb db)
-    => TypedResults.Ok(await db.Cars.ToArrayAsync());
+    => TypedResults.Ok
+    (await db.Cars.Select(
+        x => new CarDTO(x))
+        .ToArrayAsync()
+    );
 
 static async Task<IResult> GetReservedCars(CarDb db)
-    => TypedResults.Ok(await db.Cars.Where(c => c.Reserved == true).ToListAsync());
-
-// app.MapGet("/", async (CarDb db) =>
-//     await db.Cars.ToListAsync());
-
-// app.MapGet("/reserved", async (CarDb db) =>
-//     await db.Cars.Where(c => c.Reserved == true).ToListAsync());
+    => TypedResults
+    .Ok(await db.Cars.Where(c => c.Reserved == true)
+        .Select(x => new CarDTO(x)).ToListAsync()
+    );
 
 
 static async Task<IResult> GetCarById(int id, CarDb db)
 {
     return await db.Cars.FindAsync(id) 
         is Car car 
-        ? TypedResults.Ok(car) 
-        : TypedResults.NotFound();
+        ? TypedResults.Ok(new CarDTO(car)) 
+        : TypedResults.NotFound("No Such car found");
 }
-
-
-// app.MapGet("/{id}", async (int id, CarDb db) =>
-// {
-//     Car? car = await db.Cars.FindAsync(id);
-//     if (car is not null) return  Results.Ok(car);
-//     else return Results.NotFound();
-// }
-// );
 
 static async Task<IResult> CreateNewCar(Car car, CarDb db){
     await db.Cars.AddAsync(car);
     await db.SaveChangesAsync();
-    return  TypedResults.Created($"/caritems/{car.Id}", car);
+    CarDTO itemDTO = new CarDTO(car);
+    return  TypedResults.Created($"/caritems/{car.Id}", itemDTO);
 }
 
-// app.MapPost("/", async (Car car, CarDb db) =>
-// {
-//     db.Cars.Add(car);
-//     await db.SaveChangesAsync();
 
-//     return Results.Created($"/caritems/{car.Id}", car);
-// } );
-
-static async Task<IResult> UpdateCar(int id, Car inputCar, CarDb db){
+static async Task<IResult> UpdateCar(int id, CarDTO inputCar, CarDb db){
     Car car = await db.Cars.FindAsync(id);
 
     if (car is null) return TypedResults.NotFound($"The specificied car {car} is not found");
@@ -96,26 +82,10 @@ static async Task<IResult> UpdateCar(int id, Car inputCar, CarDb db){
         car.Reserved = inputCar.Reserved;
         car.Year = inputCar.Year;
     }
+
+    await db.SaveChangesAsync();
     return TypedResults.Ok("Updates are succesful");
 }
-
-
-
-// app.MapPut("/{id}", async (int id, Car car, CarDb db) =>
-// {
-//     Car? searchCar = await db.Cars.FindAsync(id);
-//     if (searchCar is null) return Results.NotFound();
-
-//     searchCar.Brand = car.Brand;
-//     searchCar.Model = car.Model;
-//     searchCar.Price = car.Price;
-//     searchCar.Reserved = car.Reserved;
-//     searchCar.Year = car.Year;
-
-//     await db.SaveChangesAsync();
-
-//     return Results.NoContent();
-// });
 
 static async Task<IResult> RemoveCarById(int id, CarDb db){
     if (await db.Cars.FindAsync(id) is Car car){
@@ -123,14 +93,5 @@ static async Task<IResult> RemoveCarById(int id, CarDb db){
         return TypedResults.Ok("Removed");
     } return TypedResults.NotFound("No such car found");
 }
-// app.MapDelete("/{id}", async (int id, CarDb db) => 
-// {
-//     if (await db.Cars.FindAsync(id) is Car car)
-//     {
-//         db.Cars.Remove(car);
-//         await db.SaveChangesAsync();
-//         return Results.NoContent();
-//     }return Results.NotFound();
-// });
 
 app.Run();

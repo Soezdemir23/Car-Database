@@ -5,6 +5,7 @@ public class Car {
     public int? Year {get;set;}
     public bool Reserved {get;set;}
     public Decimal Price {get;set;}
+    public string? Owner {get; set;}
 
 
 
