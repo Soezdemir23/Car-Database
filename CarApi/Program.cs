@@ -1,9 +1,16 @@
 
 using Microsoft.EntityFrameworkCore;
-using NSwag.AspNetCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Json
+builder.Services.ConfigureHttpJsonOptions(options => {
+    options.SerializerOptions.WriteIndented = true;
+    options.SerializerOptions.IncludeFields = true;
+});
+
+
 //Database
 builder.Services.AddDbContext<CarDb>(opt => opt.UseInMemoryDatabase("CarList"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -72,9 +79,9 @@ static async Task<IResult> CreateNewCar(Car car, CarDb db){
 
 
 static async Task<IResult> UpdateCar(int id, CarDTO inputCar, CarDb db){
-    Car car = await db.Cars.FindAsync(id);
+    Car? car = await db.Cars.FindAsync(id);
 
-    if (car is null) return TypedResults.NotFound($"The specificied car {car} is not found");
+    if (car is null) return TypedResults.NotFound($"The specificied car with the id {id} is not found: {car}");
     else {
         car.Brand = inputCar.Brand;
         car.Model = inputCar.Model;
@@ -84,14 +91,14 @@ static async Task<IResult> UpdateCar(int id, CarDTO inputCar, CarDb db){
     }
 
     await db.SaveChangesAsync();
-    return TypedResults.Ok("Updates are succesful");
+    return TypedResults.Ok($"Updates are succesful:\n {car}");
 }
 
 static async Task<IResult> RemoveCarById(int id, CarDb db){
     if (await db.Cars.FindAsync(id) is Car car){
         db.Cars.Remove(car);
         return TypedResults.Ok("Removed");
-    } return TypedResults.NotFound("No such car found");
+    } return TypedResults.NotFound($"No such car found with id {id}.");
 }
 
 app.Run();
