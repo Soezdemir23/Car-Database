@@ -12,8 +12,14 @@ builder.Services.ConfigureHttpJsonOptions(options => {
 
 
 //Database - In Memory
-builder.Services.AddDbContext<CarDb>(opt => opt.UseInMemoryDatabase("CarList"));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+//builder.Services.AddDbContext<CarDb>(opt => opt.UseInMemoryDatabase("CarList"));
+//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+//Data - SQLITE
+var connectionString = builder.Configuration.GetConnectionString("Car-Database") ?? "Data Source=Car-Database.db";
+builder.Services.AddSqlite<CarDb>(connectionString);
+
+
 
 //Swagger
 builder.Services.AddEndpointsApiExplorer();
