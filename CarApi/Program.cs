@@ -11,7 +11,7 @@ builder.Services.ConfigureHttpJsonOptions(options => {
 });
 
 
-//Database
+//Database - In Memory
 builder.Services.AddDbContext<CarDb>(opt => opt.UseInMemoryDatabase("CarList"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
