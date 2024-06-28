@@ -23,6 +23,8 @@
 **/.yarnrc
 **/yarn.lock
 **/package-lock.json
+# React
+
 
 # IDE specific files
 *.idea/
