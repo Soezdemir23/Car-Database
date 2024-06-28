@@ -61,12 +61,11 @@ static async Task<IResult> GetAllCars(CarDb db)
         .ToArrayAsync()
     );
 
-static async Task<IResult> GetReservedCars(CarDb db)
-    => TypedResults
-    .Ok(await db.Cars.Where(c => c.Reserved == true)
-        .Select(x => new CarDTO(x)).ToListAsync()
-    );
-
+static async Task<IResult> GetReservedCars(CarDb db) {
+    List<Car> cars = await db.Cars.Where(c => c.Reserved == true).ToListAsync();
+    List<Car> reservedCars = cars.Where(car => car.Reserved).ToList();
+    return reservedCars.Count > 1 ? TypedResults.Ok(reservedCars): TypedResults.NotFound("All cars are freely available");
+} 
 
 static async Task<IResult> GetCarById(int id, CarDb db)
 {
@@ -103,6 +102,7 @@ static async Task<IResult> UpdateCar(int id, CarDTO inputCar, CarDb db){
 static async Task<IResult> RemoveCarById(int id, CarDb db){
     if (await db.Cars.FindAsync(id) is Car car){
         db.Cars.Remove(car);
+        await db.SaveChangesAsync();
         return TypedResults.Ok("Removed");
     } return TypedResults.NotFound($"No such car found with id {id}.");
 }
