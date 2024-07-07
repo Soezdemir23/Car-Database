@@ -1,0 +1,8 @@
+{
+    "cars": [
+        { "id": 1, "brand": "Tesla", "model": "Y - 300", "year": 1990, "reserved": false, "price": 19000},
+        { "id": 2, "brand": "Ford", "model": "Mustang F'", "year": 2030, "reserved": true, "price": 5400},
+        { "id": 3, "brand": "Lamborghini", "model": "Murcielago Genesis", "year": 2080, "reserved": true, "price":9007199254740991 },
+        { "id": 4, "brand": "Kia", "model": "Brando", "year": 2074, "reserved": false, "price":43454 }
+    ]
+  }
