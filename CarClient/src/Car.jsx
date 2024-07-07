@@ -13,15 +13,16 @@ function Car() {
         fetchCarData();
     }, []);
 
-    const fetchCarData = () => {
+    const fetchCarData = async () => {
         //first simulate getting data from the API:
-        const carData = [
-            { id: 1, brand: "Tesla", model: "Y - 300", year: 1990, reserved: false, price: 19000},
-            { id: 2, brand: "Ford", model: "Mustang F'", year: 2030, reserved: true, price: 5400},
-            { id: 3, brand: "Lamborghini", model: "Murcielago Genesis", year: 2080, reserved: true, price: Number.MAX_SAFE_INTEGER},
-        ];
-        setData(carData);
-        setMaxId(Math.max(...carData.map(car => car.id)));
+        const carRequest = await fetch("http://localhost:5100/cars")
+        const carResponse = await carRequest.json();
+        await setData(carResponse);
+        await setMaxId(Math.max(...carResponse.map(car => car.id)));
+        
+        // setData(carData);
+        // setMaxId(Math.max(...carData.map(car => car.id)));
+            
     };
 
     const handleCreate = (item) => {
