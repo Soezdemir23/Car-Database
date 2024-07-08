@@ -21,6 +21,7 @@ function CarList({name, data, onCreate, onUpdate, onDelete, error}){
         setFormData(prevData => ({
             ...prevData, [name]: value
         }));
+        
         setSelectedOption(formData.reserved);
     };
 
@@ -45,6 +46,7 @@ function CarList({name, data, onCreate, onUpdate, onDelete, error}){
 
     const handleEdit = (item) => {
         setEditingId(item.id);
+        setSelectedOption(item.reserved);
         setFormData({
             id: item.id, brand: item.brand, model: item.model, 
             year: item.year, reserved: item.reserved, price: item.price
@@ -66,14 +68,14 @@ function CarList({name, data, onCreate, onUpdate, onDelete, error}){
                     type="text"
                     name="brand"
                     placeholder="Brand"
-                    value={formData.brand}
+                    value={formData.brand === "" ?  "unknown" : formData.brand}
                     onChange={handleFormChange}
                 />
                 <input
                     type="text"
                     name="model"
                     placeholder="Model"
-                    value={formData.model}
+                    value={formData.model === "" || formData.model === null ? "unknown" : formData.model}
                     onChange={handleFormChange}
                 />
                 <input
@@ -95,7 +97,7 @@ function CarList({name, data, onCreate, onUpdate, onDelete, error}){
                     value={selectedOption}
                     onChange={handleFormChange}
                 >
-                    <option>Choose an option</option>
+                    <option value={null}>Choose an option</option>
                     <option value={"true"}>reserved</option>
                     <option value={"false"}>available</option>
                 </select>
@@ -107,7 +109,7 @@ function CarList({name, data, onCreate, onUpdate, onDelete, error}){
             <ul>
                 {data.map(item => (
                     <li key={item.id}>
-                        <div>{item.brand} - {item.model} - {item.year} - {item.price} - {item.reserved === true? "Available": "Unavailable"}</div>
+                        <div>{item.brand} - {item.model} - {item.year} - {item.price} - {item.reserved === true? "Unavailable": "Available"}</div>
                         <div>
                             <button onClick={() => handleEdit(item)}>Edit</button>
                             <button onClick={() => onDelete(item.id)}> Delete</button>
@@ -115,7 +117,6 @@ function CarList({name, data, onCreate, onUpdate, onDelete, error}){
                     </li>
                 ))}
             </ul>
-            
         </div>
     );
 }
