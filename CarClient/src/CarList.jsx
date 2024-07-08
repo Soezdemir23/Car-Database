@@ -13,18 +13,26 @@ function CarList({name, data, onCreate, onUpdate, onDelete, error}){
             year: null, reserved: false, price: null
         });
     const [editingId, setEditingId] = useState(null);
-    
+    const [selectedOption, setSelectedOption] = useState(null);
 
     const handleFormChange = (event) => {
         const {name, value} = event.target;
+        
         setFormData(prevData => ({
             ...prevData, [name]: value
         }));
+        setSelectedOption(formData.reserved);
     };
 
     const handleSubmit = (event) =>  {
         event.preventDefault();
+        console.log(formData);
         if (editingId) {
+            if (selectedOption === "true"){
+                formData.reserved = true;
+            }else {
+                formData.reserved = false;
+            }
             onUpdate(formData);
             setEditingId(null);
         } else {
@@ -72,22 +80,25 @@ function CarList({name, data, onCreate, onUpdate, onDelete, error}){
                     type="text"
                     name="year"
                     placeholder="Year"
-                    value={formData.year === null ? 0: formData.year}
+                    value={formData.year === null ? "": formData.year}
                     onChange={handleFormChange}
                 />
                 <input
                     type="text"
-                    name="reserved"
-                    placeholder="Reserved"
-                    value={
-                        formData.reserved !== null
-                        ? formData.reserved === true
-                            ? "reserved"
-                            : "available"
-                        : "unknown"
-                    }
+                    name="price"
+                    placeholder="Price"
+                    value={formData.price === null? "": formData.price}
                     onChange={handleFormChange}
-                />
+                    />
+                <select
+                    name="reserved"
+                    value={selectedOption}
+                    onChange={handleFormChange}
+                >
+                    <option>Choose an option</option>
+                    <option value={"true"}>reserved</option>
+                    <option value={"false"}>available</option>
+                </select>
                 <button type="submit">{ editingId ? ' Update' : 'Create'}</button>
                 {editingId && <button type="button" onClick={handleCancelEdit}>Cancel</button>}
             </form>

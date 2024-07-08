@@ -8,7 +8,7 @@ export default defineConfig({
     port: 3000, // Client port
     proxy: {
       '/cars': {
-        target: 'http://localhost:5059',
+        target: 'http://localhost:5100',// mock server port
         changeOrigin: true,
         secure: false,
         ws: true,

@@ -19,8 +19,14 @@ builder.Services.ConfigureHttpJsonOptions(options => {
 var connectionString = builder.Configuration.GetConnectionString("Car-Database") ?? "Data Source=Car-Database.db";
 builder.Services.AddSqlite<CarDb>(connectionString);
 
+// 1) define a unique string
+string MyAllowSpecificOrigins = "_myallowSpecificOrigins";
 
-
+// 2) deine allowed domains, in this case "http://cars-db.com" and "*" = all domains, for testing purposes only
+ builder.Services.AddCors(options =>
+ {
+    options.AddPolicy(name: MyAllowSpecificOrigins, builder => {builder.WithOrigins("http://cars-db.com", "*");});
+ });
 //Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument(config =>
