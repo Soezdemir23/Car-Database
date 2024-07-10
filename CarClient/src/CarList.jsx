@@ -1,12 +1,12 @@
 //@ts-check
-import React, {useState} from "react"; 
+import React, {useEffect,useState} from "react"; 
+import { TextField,Button, Box, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Select, MenuItem, InputLabel, FormControl} from "@mui/material";
+import {Delete, Edit} from '@mui/icons-material';
 
 
 function CarList({name, data, onCreate, onUpdate, onDelete, error}){
     
-    console.log(data)
-
-
+    console.log("CarList: "+ JSON.stringify(data));
 
     const [formData, setFormData] = useState(
         {id: '', brand: "", model: "", 
@@ -61,63 +61,78 @@ function CarList({name, data, onCreate, onUpdate, onDelete, error}){
     }
 
     return (
-        <div>
-            <h2>New {name}</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
+        <Box className="Box" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <h2>{name}</h2>
+            <form onSubmit={handleSubmit} style={{ display: 'flex',flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                <TextField
+                    label="Brand"
+                    variant="standard"
+
                     name="brand"
-                    placeholder="Brand"
-                    value={formData.brand === "" ?  "unknown" : formData.brand}
+                    value={formData.brand === "" ?  "-" : formData.brand}
                     onChange={handleFormChange}
                 />
-                <input
-                    type="text"
+                <TextField
+                    label="Model"
+                    variant="standard"
+
                     name="model"
-                    placeholder="Model"
-                    value={formData.model === "" || formData.model === null ? "unknown" : formData.model}
+                    value={formData.model === "" || formData.model === null ? "-" : formData.model}
                     onChange={handleFormChange}
                 />
-                <input
-                    type="text"
+                <TextField
+                    variant="standard"
+                    label="Year"
                     name="year"
-                    placeholder="Year"
-                    value={formData.year === null ? "": formData.year}
+                    value={formData.year === null ? "-": formData.year}
                     onChange={handleFormChange}
                 />
-                <input
-                    type="text"
+                <TextField
+                    variant="standard"
+                    label="Price"
                     name="price"
-                    placeholder="Price"
-                    value={formData.price === null? "": formData.price}
+                    value={formData.price === null? "0": formData.price}
                     onChange={handleFormChange}
                     />
-                <select
-                    name="reserved"
-                    value={selectedOption}
-                    onChange={handleFormChange}
-                >
-                    <option value={null}>Choose an option</option>
-                    <option value={"true"}>reserved</option>
-                    <option value={"false"}>available</option>
-                </select>
-                <button type="submit">{ editingId ? ' Update' : 'Create'}</button>
-                {editingId && <button type="button" onClick={handleCancelEdit}>Cancel</button>}
+                <FormControl variant="standard" sx={{ minWidth:180}}>
+                    <InputLabel id="reservation-label">Reservation</InputLabel>
+                        <Select
+                            labelId="reservation-label"
+                            name="Reservation"
+                            value={selectedOption}
+                            onChange={handleFormChange}
+                        >
+                            <MenuItem value={"null"}>Choose an option</MenuItem>
+                            <MenuItem value={"true"}>reserved</MenuItem>
+                            <MenuItem value={"false"}>available</MenuItem>
+                        </Select>
+                </FormControl>
+                <Button sx={{mr:1}} variant="contained" type="submit">{editingId === null ? 'Create' : 'Update'} </Button>
+                {editingId && <Button variant="contained" color="secondary" type="button" onClick={handleCancelEdit}>Cancel</Button>}
             </form>
-            {error && <div>{error.message}</div>}
-            <h2>{name}</h2>
-            <ul>
+            <List sx={{ width: '100%', maxWidth: 360}}>
                 {data.map(item => (
-                    <li key={item.id}>
-                        <div>{item.brand} - {item.model} - {item.year} - {item.price} - {item.reserved === true? "Unavailable": "Available"}</div>
-                        <div>
-                            <button onClick={() => handleEdit(item)}>Edit</button>
-                            <button onClick={() => onDelete(item.id)}> Delete</button>
-                        </div>
-                    </li>
+                    <ListItem key={item.id} secondaryAction={
+                        <>
+                            <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(item.id)}>
+                                <Edit/>
+                            </IconButton>
+                            <IconButton edge="end" aria-label="delete" onClick={() => onDelete(item.id)}>
+                                <Delete />
+                            </IconButton>
+                        </>
+                    }>
+
+<ListItemText primary={"Brand"} secondary={item.brand}  />
+<ListItemText primary={"Model"} secondary={item.model}  />
+<ListItemText primary={"Year"} secondary={item.year}  />
+<ListItemText primary={"Price"} secondary={item.price}  />
+<ListItemText primary={"reservation"} secondary={item.reserved === true?"Unavailable": "Available"}  />
+
+</ListItem>
                 ))}
-            </ul>
-        </div>
+            </List>
+        </Box>
     );
 }
 
