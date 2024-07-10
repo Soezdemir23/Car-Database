@@ -1,4 +1,4 @@
-//@ts-check
+
 import React, { useState, useEffect } from 'react';
 import CarList from './CarList';
 
