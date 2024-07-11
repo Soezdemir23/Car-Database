@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CarInterface } from '../car-interface';
 import { DatePipe } from '@angular/common';
 
@@ -20,8 +20,10 @@ export class CarListComponent {
   };
   @Input() carlist: Array<CarInterface> = [];
   @Input() listTitle: string="";
-  
-  
+  @Output() submittedCar = new EventEmitter<any>();
+  @Output() deleteCar = new EventEmitter<number>();
+
+
   formatDateToYYYMMDD(date:Date) {
     const d = new Date(date);
     let month = ''+ (d.getMonth()+1),
@@ -33,8 +35,6 @@ export class CarListComponent {
 
     return [year, month, day].join('-')
   }
-
-
   handleFormChange($event: Event): void {
     const { name, value } = $event.target as HTMLInputElement;
     // Rest of the code...
@@ -56,23 +56,26 @@ export class CarListComponent {
           this.car.reserved = value === "true" ? true : false;
           break;
       default:
-        console.log("Fallthrough: "+ name + ":"+ value);
+        console.error("Fallthrough: "+ name + ":"+ value);
         break;
     }
-    console.log("onchange: " + JSON.stringify(this.car))
   }
 
 
   handleSubmit($event:Event){
     $event.preventDefault();
-    if (this.car.id >0){
-      this.carlist = this.carlist.map(item => item.id === this.car.id ? this.car: item);
-      console.log("car updated: " + JSON.stringify(this.car))
-    }else {
-      this.car.id = this.carlist.length+1;
-      this.carlist.push(this.car);
-      console.log("Car created: "+ JSON.stringify(this.car))
-    }
+
+    this.submittedCar.emit(this.car);
+
+    // if (this.car.id >0){
+    //   this.carlist = this.carlist.map(item => item.id === this.car.id ? this.car: item);
+    //   this.selectedCar.emit(this.car);
+    // }else {
+    //   this.car.id = this.carlist.length+1;
+    //   this.carlist.push(this.car);
+    //   this.selectedCar.emit(this.car);
+    //   console.log("Car created: "+ JSON.stringify(this.car))
+    // }
     this.car = {id: -1, brand: "", model: "", year: this.formatDateToYYYMMDD(new Date()), price: 0, reserved: undefined};
   }
 
@@ -85,7 +88,9 @@ export class CarListComponent {
   }
 
   onDelete(id: number) {
-   this.carlist= this.carlist.filter(car => car.id !== id);
+    this.deleteCar.emit(id);
+  //  this.carlist= this.carlist.filter(car => car.id !== id);
+  //  this.selectedCar.emit(this.car);
   }
 
   onCancel($event: Event): void {

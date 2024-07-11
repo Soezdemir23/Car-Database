@@ -1,4 +1,9 @@
 <div>
   
-    <app-car-list [carlist]="cars" [listTitle]="title"></app-car-list>
+    <app-car-list  
+    [carlist]="cars" 
+    [listTitle]="title"
+    (submittedCar) = "handleSubmitCar($event)"
+    (deleteCar)="handleDelete($event)"
+    ></app-car-list>
 </div>
