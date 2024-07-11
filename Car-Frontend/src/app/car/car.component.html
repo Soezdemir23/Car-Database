@@ -1,12 +1,4 @@
 <div>
-    @for (car of cars; track car.id){
-        <ul>
-            <li>{{car.brand}}</li>
-            <li>{{car.model}}</li>
-            <li>{{car.price}}</li>
-            <li>{{car.year | date }}</li>
-            <li>{{car.reserved}}</li>
-            </ul>
-    }
-    <app-car-list [carlist]="cars"></app-car-list>
+  
+    <app-car-list [carlist]="cars" [listTitle]="title"></app-car-list>
 </div>

@@ -12,6 +12,7 @@ import { DatePipe } from '@angular/common';
 })
 
 export class CarComponent {
+title= "Cars"
 
  cars: Array<CarInterface> = [
     {
