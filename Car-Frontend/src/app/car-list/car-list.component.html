@@ -1,1 +1,33 @@
-<p>car-list works!</p>
+<div>
+    <form (submit)="handleSubmit($event)" method="POST">
+        <input type="text" [value]="car.brand" name="brand" placeholder="Brand" (change)="handleFormChange($event)">
+        <input type="text" [value]="car.model" name ="model" placeholder="Model" (change)="handleFormChange($event)">  
+        <input type="text" [value]="car.price" name ="price" placeholder="Price" (change)="handleFormChange($event)">  
+        <input type="date" [value]="car.year" name="year" placeholder="Year" (change)="handleFormChange($event)">
+        <select name="reserved" [value]="car.reserved" (change)="handleFormChange($event)">
+            <option value="">Choose a selection</option>
+            <option value="false">Available</option>
+            <option value="true">Unavailable</option>
+        </select>
+        @if(car.id > 0){
+            <button type="submit">Edit</button>
+        } @else {
+            <button type="submit">Create</button>
+        }
+        <button (click)="onCancel($event)">Cancel</button>
+    </form>
+    <h2>{{listTitle}}</h2>
+    @for (car of carlist; track car.id){
+        <ul>
+            <li>{{car.brand}}</li>
+            <li>{{car.model}}</li>
+            <li>{{car.price}}</li>
+            <li>{{car.year | date }}</li>
+            <li>{{car.reserved}}</li>
+            <li>
+                <button (click)="onEdit(car.id)">Edit</button>
+                <button (click)="onDelete(car.id)">Delete</button>
+            </li>
+        </ul>
+    }
+</div>
