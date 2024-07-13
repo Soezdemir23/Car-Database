@@ -23,7 +23,7 @@
             <li>{{car.model}}</li>
             <li>{{car.price}}</li>
             <li>{{car.year | date }}</li>
-            <li>{{car.reserved}}</li>
+            <li>{{car.reserved === true? "reserved" : "available"}}</li>
             <li>
                 <button (click)="onEdit(car.id)">Edit</button>
                 <button (click)="onDelete(car.id)">Delete</button>

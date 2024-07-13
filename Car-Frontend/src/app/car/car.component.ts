@@ -12,26 +12,26 @@ import { CarServiceService } from '../car-service.service';
   templateUrl: './car.component.html',
   styleUrl: './car.component.css'
 })
-export class CarComponent implements OnInit{
-title= "Cars"
+export class CarComponent implements OnInit {
+  title = "Cars"
 
   cars: Array<CarInterface> = []
-  
-  constructor(private carService: CarServiceService){}
+
+  constructor(private carService: CarServiceService) { }
 
   ngOnInit(): void {
     this.carService.getCars().subscribe({
-      next: (data) => this.cars=data,
+      next: (data) => this.cars = data,
       error: (e) => console.error("an error trying to get cars: ", e),
       complete: () => console.log("complete")
     });
   }
-  
-  
+
+
   //fetch will be handled later when the api part is set up
 
-  handleSubmitCar($event: CarInterface ) {
-    if ($event.id >0){
+  handleSubmitCar($event: CarInterface) {
+    if ($event.id > 0) {
       this.carService.updateCar($event, $event.id).subscribe({
         next: (updatedCar) => {
           console.log("Car updated: " + JSON.stringify(updatedCar))
@@ -40,31 +40,32 @@ title= "Cars"
         },
         error: (e) => console.error("An error during update: ", e),
         complete: () => "update finished"
-        })
-    }else {
+      })
+    } else {
       this.carService.createCar($event).subscribe({
         next: (newCar) => {
-          newCar.id = this.cars.length+1
+          newCar.id = this.cars.length + 1
           console.log("Car created: ", newCar)
-          this.cars.push(newCar) 
+          this.cars.push(newCar)
         }
-          ,
+        ,
         error: (e) => console.error("Error creating car: ", e),
         complete: () => console.log("car creation finished")
+
       })
     }
-  }
 
-
-  // handle delete
-  handleDelete(id:number) {
-    this.carService.removeCar(id).subscribe({
-      next: (n) => {
-        this.cars = this.cars.filter(car => car.id !== id);
-        console.log("removal succesful")
-      },
-      error: (e) => console.error("removal unsuccesful: ", e),
-      complete: () => console.log("removal complete")
-    })
   }
+     // handle delete
+     handleDelete(id: number) {
+      this.carService.removeCar(id).subscribe({
+        next: (n) => {
+          this.cars = this.cars.filter(car => car.id !== id);
+          console.log("removal succesful")
+        },
+        error: (e) => console.error("removal unsuccesful: ", e),
+        complete: () => console.log("removal complete")
+      })
+    }
 }
+
