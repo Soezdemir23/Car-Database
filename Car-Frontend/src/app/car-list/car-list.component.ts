@@ -1,15 +1,50 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CarInterface } from '../car-interface';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
+
+import { CarInterface } from '../car-interface';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+
+
+interface CarFormGroup{
+  brand:string,
+  model:string,
+  price:number,
+  year: string,
+  reserved:boolean,
+
+}
 
 @Component({
   selector: 'app-car-list',
   standalone: true,
-  imports: [DatePipe],
+  providers:[provideNativeDateAdapter(), {provide: MAT_DATE_LOCALE, useValue: 'en-US'}],
+  imports: [
+    DatePipe, MatFormFieldModule, MatInputModule, MatDatepickerModule, 
+    ReactiveFormsModule,MatSelectModule, MatButtonModule,MatTableModule
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './car-list.component.html',
   styleUrl: './car-list.component.css'
 })
 export class CarListComponent {
+  
+  displayedColumns: string[] = ['brand', 'model','price', 'year', 'reserved', 'operations']
+
+  carForm = new FormGroup({
+    brand: new FormControl('', [Validators.minLength(2)]),
+    model: new FormControl('', [Validators.minLength(2)]),
+    price: new FormControl(0, [Validators.min(1)]),
+    year: new FormControl(new Date().toISOString()),
+    reserved: new FormControl<string>("", Validators.required),
+  }, {updateOn: 'change'})
   car:CarInterface = {
     id: -1,
     brand: "",
@@ -35,7 +70,9 @@ export class CarListComponent {
 
     return [year, month, day].join('-')
   }
+  
   handleFormChange($event: Event): void {
+    console.log($event)
     const { name, value } = $event.target as HTMLInputElement;
     // Rest of the code...
     switch (name) {
@@ -49,7 +86,6 @@ export class CarListComponent {
           this.car.price = parseInt(value);
         break;
         case "year":
-        
           this.car.year = this.formatDateToYYYMMDD(new Date(value));
         break;
         case "reserved":
@@ -64,6 +100,16 @@ export class CarListComponent {
 
   handleSubmit($event:Event){
     $event.preventDefault();
+    console.log(`this.car: ${this.car.reserved}, this.carForm: ${this.carForm.value.reserved}`)
+    this.car = {
+      id: this.car.id,
+      brand: this.carForm.value.brand!,
+      model: this.carForm.value.model!,
+      price: this.carForm.value.price!,
+      year: this.carForm.value.year!,
+      reserved: this.carForm.value.reserved === "true"? true: false
+    }
+    console.log(`this.car: ${this.car.reserved}, this.carForm: ${this.carForm.value.reserved}`)
 
     this.submittedCar.emit(this.car);
 
@@ -77,12 +123,26 @@ export class CarListComponent {
     //   console.log("Car created: "+ JSON.stringify(this.car))
     // }
     this.car = {id: -1, brand: "", model: "", year: this.formatDateToYYYMMDD(new Date()), price: 0, reserved: undefined};
+    this.carForm.reset();
   }
 
   onEdit(id: number) {
     const result = this.carlist.find(car => car.id === id);
-    if (result === undefined) this.car = {id: -1,brand: "", model: "", year: new Date(), price: 0, reserved: undefined};
-    else this.car = {...result}; //always forget about the referencial. Always create a shallow copy else you also reference the array.
+    console.log(result)
+    if (result === undefined) {
+      this.car = {id: -1,brand: "", model: "", year: new Date(), price: 0, reserved: undefined};
+      this.carForm.reset();
+    }
+    else{
+        this.car = {...result};
+        this.carForm.setValue({
+          brand: result.brand,
+          model:result.model,
+          price:result.price,
+          reserved: result.reserved ? "true": "false",
+          year:typeof result.year === "string"? result.year: new Date(result.year).toISOString() 
+        });
+      } //always forget about the referencial. Always create a shallow copy else you also reference the array.
     if (typeof this.car.year !== "string" ) this.car.year= this.formatDateToYYYMMDD(this.car.year);
 
   }

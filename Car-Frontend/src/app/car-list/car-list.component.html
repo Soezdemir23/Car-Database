@@ -1,33 +1,72 @@
 <div>
-    <form (submit)="handleSubmit($event)" method="POST">
-        <input type="text" [value]="car.brand" name="brand" placeholder="Brand" (change)="handleFormChange($event)">
-        <input type="text" [value]="car.model" name ="model" placeholder="Model" (change)="handleFormChange($event)">  
-        <input type="text" [value]="car.price" name ="price" placeholder="Price" (change)="handleFormChange($event)">  
-        <input type="date" [value]="car.year" name="year" placeholder="Year" (change)="handleFormChange($event)">
-        <select name="reserved" [value]="car.reserved" (change)="handleFormChange($event)">
-            <option value="">Choose a selection</option>
-            <option value="false">Available</option>
-            <option value="true">Unavailable</option>
-        </select>
+    <form  [formGroup]="carForm"   (ngSubmit)="handleSubmit($event)" method="POST">
+     
+        <mat-form-field>
+            <mat-label>Brand</mat-label>
+            <input matInput type="text" name="brand" formControlName="brand" placeholder="" >
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Model</mat-label>
+            <input matInput type="text" name ="model" formControlName="model" placeholder="" >  
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Price</mat-label>
+            <input matInput type="text"  name ="price"  formControlName="price"  placeholder="" >  
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Year</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="year" >
+            <mat-hint>mm/dd/yyyy</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Available?</mat-label>
+            <mat-select name="reserved" formControlName="reserved">
+                <mat-option value="">Choose a selection</mat-option>
+                <mat-option value="false">Available</mat-option>
+                <mat-option value="true">Unavailable</mat-option>
+            </mat-select>
+        </mat-form-field>
         @if(car.id > 0){
-            <button type="submit">Edit</button>
+            <button mat-raised-button type="submit">Update</button>
         } @else {
-            <button type="submit">Create</button>
+            <button mat-raised-button type="submit">Create</button>
         }
-        <button (click)="onCancel($event)">Cancel</button>
+        <button mat-raised-button (click)="onCancel($event)">Cancel</button>
     </form>
     <h2>{{listTitle}}</h2>
-    @for (car of carlist; track car.id){
-        <ul>
-            <li>{{car.brand}}</li>
-            <li>{{car.model}}</li>
-            <li>{{car.price}}</li>
-            <li>{{car.year | date }}</li>
-            <li>{{car.reserved === true? "reserved" : "available"}}</li>
-            <li>
-                <button (click)="onEdit(car.id)">Edit</button>
-                <button (click)="onDelete(car.id)">Delete</button>
-            </li>
-        </ul>
-    }
+    <table mat-table [dataSource]="carlist">
+        <ng-container matColumnDef="brand">
+            <th mat-header-cell *matHeaderCellDef>Brand</th>
+            <td mat-cell *matCellDef="let car">{{car.brand}}</td>
+        </ng-container>
+        <ng-container matColumnDef="model">
+            <th mat-header-cell *matHeaderCellDef>Model</th>
+            <td mat-cell *matCellDef="let car">{{car.model}}</td>
+        </ng-container>
+        <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef>Price</th>
+            <td mat-cell *matCellDef="let car">{{car.price}}</td>
+        </ng-container>
+        <ng-container matColumnDef="year">
+            <th mat-header-cell *matHeaderCellDef>Year</th>
+            <td mat-cell *matCellDef="let car">{{car.year}}</td>
+        </ng-container>
+        <ng-container matColumnDef="reserved">
+            <th mat-header-cell *matHeaderCellDef>Reserved</th>
+            <td mat-cell *matCellDef="let car">{{car.reserved === false? "Available": "Unavailable"}}</td>
+        </ng-container>
+        <ng-container matColumnDef="operations">
+            <th mat-header-cell *matHeaderCellDef>Operations</th>
+            <td id="operations" mat-cell *matCellDef="let car">
+                <button mat-flat-button (click)="onEdit(car.id)">Edit</button>
+                <button id="danger" mat-flat-button (click)="onDelete(car.id)">Delete</button>
+            </td>
+        </ng-container>
+        
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
 </div>
