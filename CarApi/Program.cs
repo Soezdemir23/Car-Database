@@ -1,5 +1,7 @@
 
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
+using YamlDotNet.Core.Tokens;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,7 +30,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins, builder => 
     {
-         builder.WithOrigins("http://cars-db.com", "*"); 
+         builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod(); 
     });
 });
 
@@ -68,11 +70,12 @@ carItems.MapPut("/{id}", UpdateCar);
 carItems.MapDelete("/{id}", RemoveCarById);
 
 static async Task<IResult> GetAllCars(CarDb db)
-    => TypedResults.Ok
-    (await db.Cars.Select(
-        x => new CarDTO(x))
-        .ToArrayAsync()
-    );
+{
+    var cars = await db.Cars.ToArrayAsync();
+    var carDTOs = cars.Select(x=> new CarDTO(x)).ToArray();
+    return TypedResults.Ok(carDTOs);
+}
+
 
 static async Task<IResult> GetReservedCars(CarDb db)
 {
@@ -91,6 +94,7 @@ static async Task<IResult> GetCarById(int id, CarDb db)
 
 static async Task<IResult> CreateNewCar(Car car, CarDb db)
 {
+    
     await db.Cars.AddAsync(car);
     await db.SaveChangesAsync();
     CarDTO itemDTO = new CarDTO(car);
@@ -105,11 +109,20 @@ static async Task<IResult> UpdateCar(int id, CarDTO inputCar, CarDb db)
     if (car is null) return TypedResults.NotFound($"The specificied car with the id {id} is not found: {car}");
     else
     {
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine(inputCar.Year);
+        Console.WriteLine(inputCar.Reserved);
+        Console.ResetColor();
+        // int[] yyyymmdd = inputCar.Year!.Split("-")
+        //     .Select(x => Int32.Parse(x))
+        //     .ToArray();
+        car.Year = DateTime.Parse(inputCar.Year);
         car.Brand = inputCar.Brand;
         car.Model = inputCar.Model;
         car.Price = inputCar.Price;
         car.Reserved = inputCar.Reserved;
-        car.Year = inputCar.Year;
+        
+        // car.Year = new DateTime(yyyymmdd[0], yyyymmdd[1], yyyymmdd[2]);
     }
 
     await db.SaveChangesAsync();
