@@ -27,6 +27,7 @@
               }
             ],
             "styles": [
+              "src/custom-theme.scss",
               "src/styles.css"
             ],
             "scripts": []
@@ -62,7 +63,8 @@
               "buildTarget": "Car-Frontend:build:production"
             },
             "development": {
-              "buildTarget": "Car-Frontend:build:development"
+              "buildTarget": "Car-Frontend:build:development",
+
             }
           },
           "defaultConfiguration": "development"
@@ -92,5 +94,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "925141da-f381-4688-9559-6bd866842043"
   }
 }
