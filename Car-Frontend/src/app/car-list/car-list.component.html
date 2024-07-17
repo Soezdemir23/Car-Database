@@ -1,21 +1,20 @@
-<div>
+<div class="base">
     <form  [formGroup]="carForm"   (ngSubmit)="handleSubmit($event)" method="POST">
-     
         <mat-form-field>
             <mat-label>Brand</mat-label>
-            <input matInput type="text" name="brand" formControlName="brand" placeholder="" >
+            <input matInput type="text" name="brand" formControlName="brand" placeholder="" required=true>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Model</mat-label>
-            <input matInput type="text" name ="model" formControlName="model" placeholder="" >  
+            <input matInput type="text" name ="model" formControlName="model" placeholder="" required="true">  
         </mat-form-field>
         <mat-form-field>
             <mat-label>Price</mat-label>
-            <input matInput type="text"  name ="price"  formControlName="price"  placeholder="" >  
+            <input matInput type="text"  name ="price"  formControlName="price"  placeholder="" required="true">  
         </mat-form-field>
         <mat-form-field>
             <mat-label>Year</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="year" >
+            <input matInput [matDatepicker]="picker" formControlName="year">
             <mat-hint>mm/dd/yyyy</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
@@ -28,13 +27,16 @@
                 <mat-option value="true">Unavailable</mat-option>
             </mat-select>
         </mat-form-field>
-        @if(car.id > 0){
-            <button mat-raised-button type="submit">Update</button>
-        } @else {
-            <button mat-raised-button type="submit">Create</button>
-        }
-        <button mat-raised-button (click)="onCancel($event)">Cancel</button>
+        <div id="form-id">
+            @if(car.id > 0){
+                <button mat-raised-button type="submit">Update</button>
+            } @else {
+                <button mat-raised-button type="submit">Create</button>
+            }
+            <button type="reset" mat-raised-button (click)="onCancel($event)">Cancel</button>
+        </div>
     </form>
+    
     <h2>{{listTitle}}</h2>
     <table mat-table [dataSource]="carlist">
         <ng-container matColumnDef="brand">
@@ -60,7 +62,7 @@
         <ng-container matColumnDef="operations">
             <th mat-header-cell *matHeaderCellDef>Operations</th>
             <td id="operations" mat-cell *matCellDef="let car">
-                <button mat-flat-button (click)="onEdit(car.id)">Edit</button>
+                <button id="edit" mat-flat-button (click)="onEdit(car.id)">Edit</button>
                 <button id="danger" mat-flat-button (click)="onDelete(car.id)">Delete</button>
             </td>
         </ng-container>

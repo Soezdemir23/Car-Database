@@ -8,11 +8,7 @@
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
 @include mat.core();
-@include mat.strong-focus-indicators((
-  border-style: dotted,
-  border-width: 4px,
-  border-radius: 2px,
-));
+
 // Define the theme object.
 $Car-Frontend-theme: mat.define-theme((
   color: (

@@ -1,4 +1,4 @@
-div {
+.base {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10,6 +10,14 @@ form {
     gap: 1rem;
 }
 
+#form-id {
+    display: flex;
+    gap: 15px;
+}
+#form-id > button {
+    margin-top: 10px;
+}
+
 table {
     width: 100%;
 }
@@ -17,6 +25,34 @@ table {
 th, td {
     text-align: center;
 }
+
+#operations {
+    min-height: 52px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+#edit {
+    background-color: blue;
+}
+#edit, #danger {
+    width: 70px;
+}
 #danger:active { 
     background-color: red;
+}
+
+
+
+@media only screen and (max-width: 1200px) {
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #form-id {
+        justify-content: center;
+    }
+    
 }
