@@ -19,6 +19,13 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 //builder.Services.AddDbContext<CarDb>(opt => opt.UseInMemoryDatabase("CarList"));
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
+
+
 //Data - SQLITE
 var connectionString = builder.Configuration.GetConnectionString("Car-Database") ?? "Data Source=Car-Database.db";
 builder.Services.AddSqlite<CarDb>(connectionString);
@@ -26,45 +33,35 @@ builder.Services.AddSqlite<CarDb>(connectionString);
 // 1) define a unique string
 string MyAllowSpecificOrigins = "_myallowSpecificOrigins";
 
-// 2) define allowed domains, in this case "http://cars-db.com" and "*" = all domains, for testing purposes only
+//2) define allowed domains, in this case "http://cars-db.com" and "*" = all domains, for testing purposes only
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins, builder => 
     {
-         builder.WithOrigins("*")
+         builder.WithOrigins("http://cars-database.tryasp.net/")
         .AllowAnyHeader()
         .AllowAnyMethod(); 
     });
 });
 
-//Swagger
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApiDocument(config =>
-{
-    config.DocumentName = "CarAPI";
-    config.Title = "CarAPI v1";
-    config.Version = "v1";
-});
 
 var app = builder.Build();
-// do thing if in Development environment:
-if (app.Environment.IsDevelopment())
-{
-    app.UseOpenApi();
-    app.UseSwaggerUi(config =>
-    {
-        config.DocumentTitle = "CarAPI";
-        config.Path = "/swagger";
-        config.DocumentPath = "/swagger/{documentName}/swagger.json";
-        config.DocExpansion = "list";
-    });
-}
-// use the cors capability 
+
+//// use the cors capability 
 app.UseCors(MyAllowSpecificOrigins);
+
+app.UseDeveloperExceptionPage();
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
 
 // GroupMapping API
 var carItems = app.MapGroup("/cars");
-
+app.MapGet("/", () => Results.Ok("Welcome to the Car API"));
 carItems.MapGet("/", GetAllCars);
 carItems.MapGet("/reserved", GetReservedCars);
 carItems.MapGet("/{id}", GetCarById);
