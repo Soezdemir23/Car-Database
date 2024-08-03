@@ -1,7 +1,8 @@
 
-using System.Runtime.CompilerServices;
+//using System.Runtime.CompilerServices;
+//using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using YamlDotNet.Core.Tokens;
+//using YamlDotNet.Core.Tokens;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,7 +31,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins, builder => 
     {
-         builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod(); 
+         builder.WithOrigins("*")
+        .AllowAnyHeader()
+        .AllowAnyMethod(); 
     });
 });
 
@@ -71,9 +74,16 @@ carItems.MapDelete("/{id}", RemoveCarById);
 
 static async Task<IResult> GetAllCars(CarDb db)
 {
-    var cars = await db.Cars.ToArrayAsync();
-    var carDTOs = cars.Select(x=> new CarDTO(x)).ToArray();
-    return TypedResults.Ok(carDTOs);
+    
+    try
+    {
+        var cars = await db.Cars.ToArrayAsync();
+        var carDTOs = cars.Select(x => new CarDTO(x)).ToArray();
+        return TypedResults.Ok(carDTOs);
+    } catch(HttpRequestException e) {
+        return TypedResults.BadRequest($"Error occured: {e.Message}");
+
+    }
 }
 
 
