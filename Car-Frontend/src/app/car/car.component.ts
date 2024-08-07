@@ -23,9 +23,10 @@ export class CarComponent implements OnInit {
       next: (data) => {
         console.log(data)
         const middle = data.map(car =>{
+          console.log(car.year)
           return {
             ...car,
-            year: new Date(car.year).toISOString()
+            year: new Date(car.year)
           }
         })
         console.log("Cars on init: ", middle)
@@ -49,7 +50,18 @@ export class CarComponent implements OnInit {
           console.log("Car updated: " + JSON.stringify(updatedCar))
           const index = this.cars.findIndex(car => car.id === updatedCar.id);
           console.log("index of car that is updated: ", updatedCar)
-          this.cars = this.cars.map(car => car.id === index? updatedCar: car)
+          this.cars = this.cars.map(car => {
+            if (car.id === updatedCar.id){
+              return {
+                ...car,
+                brand: updatedCar.brand,
+                model: updatedCar.model,
+                price: updatedCar.price,
+                reserved: updatedCar.reserved,
+                year: updatedCar.year
+              }
+            }return car;
+          })
           if (index !== -1) {
          
           }

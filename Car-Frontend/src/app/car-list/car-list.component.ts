@@ -71,7 +71,7 @@ export class CarListComponent {
     return [year, month, day].join('-')
   }
   
-  handleFormChange($event: Event): void {
+  handleFormChange($event: Event) {
     console.log($event)
     const { name, value } = $event.target as HTMLInputElement;
     // Rest of the code...
@@ -112,16 +112,7 @@ export class CarListComponent {
     console.log(`this.car: ${this.car.reserved}, this.carForm: ${this.carForm.value.reserved}`)
 
     this.submittedCar.emit(this.car);
-
-    // if (this.car.id >0){
-    //   this.carlist = this.carlist.map(item => item.id === this.car.id ? this.car: item);
-    //   this.selectedCar.emit(this.car);
-    // }else {
-    //   this.car.id = this.carlist.length+1;
-    //   this.carlist.push(this.car);
-    //   this.selectedCar.emit(this.car);
-    //   console.log("Car created: "+ JSON.stringify(this.car))
-    // }
+    
     this.car = {id: -1, brand: "", model: "", year: this.formatDateToYYYMMDD(new Date()), price: 0, reserved: undefined};
     this.carForm.reset();
   }

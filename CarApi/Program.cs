@@ -38,7 +38,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins, builder => 
     {
-         builder.WithOrigins("http://cars-database.tryasp.net/")
+         builder.WithOrigins(
+            "http://cars-database.tryasp.net/", 
+            "http://localhost:4200"
+            )
         .AllowAnyHeader()
         .AllowAnyMethod(); 
     });
@@ -70,8 +73,7 @@ carItems.MapPut("/{id}", UpdateCar);
 carItems.MapDelete("/{id}", RemoveCarById);
 
 static async Task<IResult> GetAllCars(CarDb db)
-{
-    
+{ 
     try
     {
         var cars = await db.Cars.ToArrayAsync();
@@ -120,9 +122,7 @@ static async Task<IResult> UpdateCar(int id, CarDTO inputCar, CarDb db)
         Console.WriteLine(inputCar.Year);
         Console.WriteLine(inputCar.Reserved);
         Console.ResetColor();
-        // int[] yyyymmdd = inputCar.Year!.Split("-")
-        //     .Select(x => Int32.Parse(x))
-        //     .ToArray();
+        
         car.Year = DateTime.Parse(inputCar.Year);
         car.Brand = inputCar.Brand;
         car.Model = inputCar.Model;

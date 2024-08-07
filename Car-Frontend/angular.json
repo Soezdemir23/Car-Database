@@ -4,6 +4,11 @@
   "newProjectRoot": "projects",
   "projects": {
     "Car-Frontend": {
+      "i18n": {
+        "sourceLocale":{
+          "code": "de"
+        }
+      },
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -63,8 +68,7 @@
               "buildTarget": "Car-Frontend:build:production"
             },
             "development": {
-              "buildTarget": "Car-Frontend:build:development",
-
+              "buildTarget": "Car-Frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -91,6 +95,9 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }
