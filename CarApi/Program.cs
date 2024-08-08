@@ -39,8 +39,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins, builder => 
     {
          builder.WithOrigins(
-            "http://cars-database.tryasp.net/", 
-            "http://localhost:4200"
+            "http://localhost:4200",
+            "https://soezdemir23.github.io/car-database/"
             )
         .AllowAnyHeader()
         .AllowAnyMethod(); 
