@@ -99,7 +99,7 @@
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {
-            "baseHref": "https://github.com/Soezdemir23/car-database/"
+            "baseHref": "https://soezdemir23.github.io/car-database/"
           }
         }
       }
