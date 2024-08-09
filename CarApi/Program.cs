@@ -122,14 +122,13 @@ static async Task<IResult> UpdateCar(int id, CarDTO inputCar, CarDb db)
         Console.WriteLine(inputCar.Year);
         Console.WriteLine(inputCar.Reserved);
         Console.ResetColor();
-        
-        car.Year = DateTime.Parse(inputCar.Year);
+
+        // there is really no need to check for null when it comes to the date. 
+        car.Year = DateTime.Parse(inputCar.Year!);
         car.Brand = inputCar.Brand;
         car.Model = inputCar.Model;
         car.Price = inputCar.Price;
         car.Reserved = inputCar.Reserved;
-        
-        // car.Year = new DateTime(yyyymmdd[0], yyyymmdd[1], yyyymmdd[2]);
     }
 
     await db.SaveChangesAsync();
