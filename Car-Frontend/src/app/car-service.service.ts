@@ -13,23 +13,23 @@ export class CarServiceService {
   constructor(private http: HttpClient) {}
   
   getCars(){
-    return this.http.get<CarInterface[]>("http://cars-database.tryasp.net/cars");
+    return this.http.get<CarInterface[]>("https://cars-database.tryasp.net/cars");
   }
 
   getCarById(id:number){
-    return this.http.get<CarInterface>(`http://cars-database.tryasp.net/cars/${id}`);
+    return this.http.get<CarInterface>(`https://cars-database.tryasp.net/cars/${id}`);
   }
 
   updateCar(newCar: CarInterface, id: number){
-    return this.http.put<CarInterface>(`http://cars-database.tryasp.net/cars/${id}`, newCar);
+    return this.http.put<CarInterface>(`https://cars-database.tryasp.net/cars/${id}`, newCar);
   }
 
   createCar(newCar:CarInterface) {
-    return this.http.post<CarInterface>("http://cars-database.tryasp.net/cars", newCar);
+    return this.http.post<CarInterface>("https://cars-database.tryasp.net/cars", newCar);
   }
 
   removeCar(id: number){
-    return this.http.delete<CarInterface>(`http://cars-database.tryasp.net/cars/${id}`);
+    return this.http.delete<CarInterface>(`https://cars-database.tryasp.net/cars/${id}`);
   }
 
 

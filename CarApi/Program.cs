@@ -7,6 +7,20 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//builder.WebHost.ConfigureKestrel(options =>
+//{
+
+//   options.ListenAnyIP(5000);
+//    options.ListenAnyIP(5001, listenOptions =>
+//    {
+//        listenOptions.UseHttps("certificate.pfx", "password");
+//    });
+//});})
+
+
+
+
+
 //Json
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
@@ -14,10 +28,6 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.IncludeFields = true;
 });
 
-
-//Database - In Memory
-//builder.Services.AddDbContext<CarDb>(opt => opt.UseInMemoryDatabase("CarList"));
-//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -48,7 +58,24 @@ builder.Services.AddCors(options =>
 });
 
 
+
+
 var app = builder.Build();
+
+
+
+
+
+//if (!app.Environment.IsDevelopment())
+//{
+//    app.UseExceptionHandler("/error");
+//    app.UseHsts();
+//}
+
+app.UseHttpsRedirection();
+
+
+
 
 //// use the cors capability 
 app.UseCors(MyAllowSpecificOrigins);
@@ -76,6 +103,7 @@ static async Task<IResult> GetAllCars(CarDb db)
 { 
     try
     {
+
         var cars = await db.Cars.ToArrayAsync();
         var carDTOs = cars.Select(x => new CarDTO(x)).ToArray();
         return TypedResults.Ok(carDTOs);
