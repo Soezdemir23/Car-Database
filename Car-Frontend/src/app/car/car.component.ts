@@ -83,6 +83,14 @@ export class CarComponent implements OnInit {
         next: (newCar) => {
           console.log("Car created: ", newCar)
           //adding a new car, making angular re-render the new entry
+          if (typeof newCar.year == 'string') {
+            let splitByTime = newCar.year.split('T');
+            let splitByDash = splitByTime[0].split('-');
+            let year = splitByDash[0];
+            let day = splitByDash[1];
+            let month = splitByDash[2];
+            newCar.year = `${splitByDash[0]}-${splitByDash[1]}-${splitByDash[2]}`;
+          }
           this.cars = [...this.cars, newCar];
         }
         ,

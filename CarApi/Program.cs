@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 //    });
 //});})
 
-builder.Services.AddHttpLogging(o => {});
+//builder.Services.AddHttpLogging(o => {});
 
 
 
@@ -64,14 +64,14 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 
-app.UseHttpLogging();
+//app.UseHttpLogging();
 
 
-//if (!app.Environment.IsDevelopment())
-//{
-//    app.UseExceptionHandler("/error");
-//    app.UseHsts();
-//}
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/error");
+    app.UseHsts();
+}
 
 app.UseHttpsRedirection();
 
@@ -132,7 +132,8 @@ static async Task<IResult> GetCarById(int id, CarDb db)
 
 static async Task<IResult> CreateNewCar(Car car, CarDb db)
 {
-    
+    Console.WriteLine("Year for car: "+ car.Year);
+    car.Owner = "Nobody";
     await db.Cars.AddAsync(car);
     await db.SaveChangesAsync();
     CarDTO itemDTO = new CarDTO(car);
@@ -147,11 +148,6 @@ static async Task<IResult> UpdateCar(int id, CarDTO inputCar, CarDb db)
     if (car is null) return TypedResults.NotFound($"The specificied car with the id {id} is not found: {car}");
     else
     {
-        Console.ForegroundColor = ConsoleColor.Blue;
-        Console.WriteLine(inputCar.Year);
-        Console.WriteLine(inputCar.Reserved);
-        Console.ResetColor();
-
         // there is really no need to check for null when it comes to the date. 
         car.Year = DateTime.Parse(inputCar.Year!);
         car.Brand = inputCar.Brand;
