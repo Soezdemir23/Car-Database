@@ -23,10 +23,18 @@ export class CarComponent implements OnInit {
       next: (data) => {
         console.log(data)
         const middle = data.map(car =>{
-          console.log(car.year)
+          //modify car year to be a useable date.
+          if (typeof car.year == 'string') {
+            let splitByTime = car.year.split('T');
+            let splitByDash = splitByTime[0].split('-');
+            let year = splitByDash[0];
+            let day = splitByDash[1];
+            let month = splitByDash[2];
+            car.year = `${splitByDash[0]}-${splitByDash[1]}-${splitByDash[2]}`;
+          }
           return {
             ...car,
-            year: new Date(car.year)
+            year: car.year
           }
         })
         console.log("Cars on init: ", middle)

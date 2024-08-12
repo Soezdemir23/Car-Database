@@ -25,7 +25,7 @@ interface CarFormGroup{
 @Component({
   selector: 'app-car-list',
   standalone: true,
-  providers:[provideNativeDateAdapter(), {provide: MAT_DATE_LOCALE, useValue: 'en-US'}],
+  providers:[provideNativeDateAdapter(), {provide: MAT_DATE_LOCALE, useValue: 'de'}],
   imports: [
     DatePipe, MatFormFieldModule, MatInputModule, MatDatepickerModule, 
     ReactiveFormsModule,MatSelectModule, MatButtonModule,MatTableModule

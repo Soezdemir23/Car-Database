@@ -45,7 +45,7 @@ export class CarServiceService {
 
   private handleError(error: HttpErrorResponse) {
     //handle error
-    console.error('An error occurred getting or using cars', error.error.message);
+    console.error('An error occurred getting or using cars', error.message);
     return throwError(
       'Something bad happened; please try again later.'
     )
