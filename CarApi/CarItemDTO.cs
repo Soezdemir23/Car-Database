@@ -38,8 +38,8 @@ public class CarDTO
         var toAddTime = dateAndHour[1];
 
         var year = toModifyDate[2];
-        var month = toModifyDate[1].Length > 1? toModifyDate[1]: "0" + toModifyDate[1];
-        var day = toModifyDate[0].Length > 1? toModifyDate[0]: "0" + toModifyDate[0];
+        var month = toModifyDate[0].Length > 1? toModifyDate[0]: "0" + toModifyDate[0];
+        var day = toModifyDate[1].Length > 1? toModifyDate[1]: "0" + toModifyDate[1];
         var toReturn = $"{year}-{month}-{day}T{toAddTime}.000Z";
         return toReturn;
 

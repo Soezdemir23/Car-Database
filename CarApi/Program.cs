@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 //    });
 //});})
 
-
+builder.Services.AddHttpLogging(o => {});
 
 
 
@@ -49,8 +49,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins, builder => 
     {
          builder.WithOrigins(
-            "http://localhost:4200",
-            "https://soezdemir23.github.io/car-database/"
+            "https://soezdemir23.github.io",
+            "https://localhost:4200"
+
             )
         .AllowAnyHeader()
         .AllowAnyMethod(); 
@@ -63,7 +64,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 
-
+app.UseHttpLogging();
 
 
 //if (!app.Environment.IsDevelopment())
