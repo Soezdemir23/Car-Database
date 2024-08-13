@@ -50,7 +50,7 @@ builder.Services.AddCors(options =>
     {
          builder.WithOrigins(
             "https://soezdemir23.github.io",
-            "https://localhost:4200"
+            
 
             )
         .AllowAnyHeader()
