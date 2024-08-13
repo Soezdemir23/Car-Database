@@ -39,9 +39,9 @@ export class CarListComponent {
   displayedColumns: string[] = ['brand', 'model','price', 'year', 'reserved', 'operations']
 
   carForm = new FormGroup({
-    brand: new FormControl('', [Validators.minLength(2)]),
-    model: new FormControl('', [Validators.minLength(2)]),
-    price: new FormControl(0, [Validators.min(1)]),
+    brand: new FormControl('', [Validators.minLength(1), Validators.maxLength(20)]),
+    model: new FormControl('', [Validators.minLength(1), Validators.maxLength(20)]),
+    price: new FormControl(0, [Validators.min(0)]),
     year: new FormControl(new Date().toISOString()),
     reserved: new FormControl<string>("", Validators.required),
   }, {updateOn: 'change'})
@@ -115,6 +115,7 @@ export class CarListComponent {
     
     this.car = {id: -1, brand: "", model: "", year: this.formatDateToYYYMMDD(new Date()), price: 0, reserved: undefined};
     this.carForm.reset();
+  
   }
 
   onEdit(id: number) {

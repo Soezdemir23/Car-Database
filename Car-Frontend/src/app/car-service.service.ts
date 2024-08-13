@@ -13,32 +13,32 @@ export class CarServiceService {
 
   constructor(private http: HttpClient) {}
   
-  getCars() {
-    return this.http.get<CarInterface[]>("https://cars-database.tryasp.net/cars").pipe(
+  getCars() {//https://cars-database.tryasp.net
+    return this.http.get<CarInterface[]>("https://localhost:7157/cars").pipe(
       catchError(this.handleError)
     );
   }
 
   getCarById(id:number){
-    return this.http.get<CarInterface>(`https://cars-database.tryasp.net/cars/${id}`).pipe(
+    return this.http.get<CarInterface>(`https://localhost:7157/cars/${id}`).pipe(
       catchError(this.handleError)
     );
   }
 
   updateCar(newCar: CarInterface, id: number){
-    return this.http.put<CarInterface>(`https://cars-database.tryasp.net/cars/${id}`, newCar).pipe(
+    return this.http.put<CarInterface>(`https://localhost:7157/cars/${id}`, newCar).pipe(
       catchError(this.handleError)
     );
   }
 
   createCar(newCar:CarInterface) {
-    return this.http.post<CarInterface>("https://cars-database.tryasp.net/cars", newCar).pipe(
+    return this.http.post<CarInterface>("https://localhost:7157/cars", newCar).pipe(
       catchError(this.handleError)
     );
   }
 
   removeCar(id: number){
-    return this.http.delete<CarInterface>(`https://cars-database.tryasp.net/cars/${id}`).pipe(
+    return this.http.delete<CarInterface>(`https://localhost:7157/cars/${id}`).pipe(
       catchError(this.handleError)
     );
   }
